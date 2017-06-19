@@ -1,0 +1,80 @@
+
+
+<html>
+<head>
+<!-- （必选）加载 Mock -->
+<script src="query.min.js"></script>
+<script src="Mock-refactoring/dist/mock.js"></script>
+<script type="text/javascript">
+var Random = Mock.Random
+
+var templete = {    //匹配.json文件，可执行匹配成功的参数
+       //数据模板
+         'id|+1': 1,
+         'email': '@EMAIL',
+         'password': /\d{5,10}/
+     
+ }
+var abc = Mock.mock(/\.json/, templete);
+
+function sendData(url) {
+    $.ajax({
+         url: url,
+         dataType: 'json'
+     }).done(function(data, status, jqXHR) {
+     var id = "id"
+     var email = "email"
+     var password = "password"
+         //获得mock数据模板中的数据，打印到body上
+         $('<pre>').text(JSON.stringify(data, null, 4)).appendTo('body');
+        document.getElementById('A1').innerHTML=data.id;
+    	document.getElementById('A2').innerHTML=data.email;
+    	document.getElementById('A3').innerHTML=data.password;
+    	//console.log(id);
+    	 //document.body.innerHTML +='<pre>' +JSON.stringify(data, null, 4) +'</pre>'
+     })
+}
+
+//-------------image----------------------------
+var t ={    
+  		//'email': '@EMAIL'   
+        'image':"@IMAGE('200x100', '@color','Hello')",
+ }
+
+Mock.mock(/\.jpg/, t);
+//匹配.jpg，可执行匹配成功的参数
+
+function sendImage(url) {
+    $.ajax({
+         url: url,
+         dataType: 'json'
+     }).done(function(data, status, jqXHR) {
+     	var image = "image";
+         //获得mock数据模板中的数据，打印到body上
+         $('<pre>').text(JSON.stringify(data, null, 4)).appendTo('body');
+        //document.body.innerHTML +='<img src="'+data.image+'">';
+        document.getElementById('A0').innerHTML='<br/><img src="'+data.image+'">';
+
+
+     })
+}
+
+</script>
+</head>
+
+<body>
+<div>
+<p><b>Photo:</b><span id="A0"></span></p>
+<p><b>ID:</b><span id="A1"></span></p>
+<p><b>email:</b><span id="A2"></span></p>
+<p><b>password:</b><span id="A3"></span></p>
+
+<button onclick="sendData('hello.json')">Get info</button>
+<button onclick="sendImage('hello.jpg')">Get Image</button>
+<br/><br/><br/>
+Random Data:
+
+</div>
+</body>
+</html>
+
